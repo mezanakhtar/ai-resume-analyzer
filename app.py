@@ -1,5 +1,15 @@
 import streamlit as st
 import pdfplumber
+import os
+import google.generativeai as genai
+
+from dotenv import load_dotenv
+
+load_dotenv()
+
+genai.configure(
+    api_key=os.getenv("GEMINI_API_KEY")
+)
 
 # =========================
 # Page Configuration
@@ -241,3 +251,45 @@ if uploaded_file is not None:
     st.progress(
         ats_score / 100
     )
+
+    # =========================
+    # AI Resume Feedback
+    # =========================
+
+    st.subheader("🤖 AI Resume Feedback")
+
+    if st.button("Generate AI Feedback"):
+
+        with st.spinner("Analyzing Resume..."):
+
+            model = genai.GenerativeModel(
+                "gemini-2.5-flash"
+            )
+
+            prompt = f"""
+            Analyze the following resume.
+
+            Provide:
+
+            1. Professional Resume Summary
+            2. Key Strengths
+            3. Weaknesses or Missing Areas
+            4. ATS Improvement Suggestions
+            5. Recommended Skills to Learn
+
+            Resume:
+
+            {resume_text}
+            """
+
+            try:
+
+                response = model.generate_content(
+                prompt
+            )
+
+                st.write(response.text)
+
+            except Exception as e:
+
+                st.error(f"Error: {e}")
