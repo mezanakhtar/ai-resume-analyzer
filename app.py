@@ -76,11 +76,15 @@ if uploaded_file is not None:
     st.success("Resume uploaded successfully!")
     st.write("**File Name:**", uploaded_file.name)
 
-    # Extract Text
+    # =========================
+    # 1. Extract Resume Text
+    # =========================
+
     resume_text = ""
 
     with pdfplumber.open(uploaded_file) as pdf:
         for page in pdf.pages:
+
             text = page.extract_text()
 
             if text:
@@ -89,6 +93,7 @@ if uploaded_file is not None:
     # =========================
     # Display Extracted Text
     # =========================
+
     st.subheader("📄 Extracted Resume Text")
 
     st.text_area(
@@ -98,8 +103,9 @@ if uploaded_file is not None:
     )
 
     # =========================
-    # Skill Detection
+    # 2. Detect Skills
     # =========================
+
     resume_text_lower = resume_text.lower()
 
     detected_skills = []
@@ -109,19 +115,30 @@ if uploaded_file is not None:
         if skill in resume_text_lower:
 
             if skill in skill_display_names:
-                detected_skills.append(skill_display_names[skill])
+                detected_skills.append(
+                    skill_display_names[skill]
+                )
             else:
-                detected_skills.append(skill.title())
+                detected_skills.append(
+                    skill.title()
+                )
 
-    # Remove Duplicates
+    # =========================
+    # 3. Remove Duplicates
+    # =========================
+
     detected_skills = list(set(detected_skills))
 
-    # Sort Alphabetically
+    # =========================
+    # 4. Sort Skills
+    # =========================
+
     detected_skills.sort()
 
     # =========================
-    # Display Skills
+    # 5. Display Skills
     # =========================
+
     st.subheader("🛠 Detected Skills")
 
     if detected_skills:
@@ -131,3 +148,96 @@ if uploaded_file is not None:
 
     else:
         st.warning("No skills detected.")
+
+    # =========================
+    # 6. ATS Score Analysis
+    # =========================
+
+    ats_score = 0
+
+    contact_keywords = [
+        "@",
+        "phone",
+        "+91"
+    ]
+
+    education_keywords = [
+        "education",
+        "bachelor",
+        "degree",
+        "cgpa"
+    ]
+
+    project_keywords = [
+        "project",
+        "projects"
+    ]
+
+    linkedin_github_keywords = [
+        "linkedin",
+        "github"
+    ]
+
+    st.subheader("📊 ATS Score Analysis")
+
+    # Contact Information
+    if any(
+        keyword in resume_text_lower
+        for keyword in contact_keywords
+    ):
+        ats_score += 20
+        st.success("✅ Contact Information Found")
+    else:
+        st.error("❌ Contact Information Missing")
+
+    # Education
+    if any(
+        keyword in resume_text_lower
+        for keyword in education_keywords
+    ):
+        ats_score += 20
+        st.success("✅ Education Section Found")
+    else:
+        st.error("❌ Education Section Missing")
+
+    # Skills
+    if len(detected_skills) > 0:
+        ats_score += 20
+        st.success("✅ Skills Section Found")
+    else:
+        st.error("❌ Skills Section Missing")
+
+    # Projects
+    if any(
+        keyword in resume_text_lower
+        for keyword in project_keywords
+    ):
+        ats_score += 20
+        st.success("✅ Projects Section Found")
+    else:
+        st.error("❌ Projects Section Missing")
+
+    # LinkedIn / GitHub
+    if any(
+        keyword in resume_text_lower
+        for keyword in linkedin_github_keywords
+    ):
+        ats_score += 20
+        st.success("✅ LinkedIn / GitHub Found")
+    else:
+        st.error("❌ LinkedIn / GitHub Missing")
+
+    # =========================
+    # 7. ATS Score Meter
+    # =========================
+
+    st.subheader("🎯 ATS Score")
+
+    st.metric(
+        label="ATS Score",
+        value=f"{ats_score}/100"
+    )
+
+    st.progress(
+        ats_score / 100
+    )
