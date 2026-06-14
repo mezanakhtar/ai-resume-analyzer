@@ -4,6 +4,17 @@ import os
 import google.generativeai as genai
 
 from dotenv import load_dotenv
+from io import BytesIO
+
+from reportlab.platypus import (
+    SimpleDocTemplate,
+    Paragraph,
+    Spacer
+)
+
+from reportlab.lib.styles import (
+    getSampleStyleSheet
+)
 
 load_dotenv()
 
@@ -85,6 +96,123 @@ skill_display_names = {
 }
 
 # =========================
+# PDF Report Generator
+# =========================
+
+def generate_pdf_report(
+    ats_score,
+    detected_skills,
+    matched_skills,
+    missing_skills,
+    ai_feedback,
+    job_feedback
+):
+
+    buffer = BytesIO()
+
+    doc = SimpleDocTemplate(buffer)
+
+    styles = getSampleStyleSheet()
+
+    content = []
+
+    content.append(
+    Paragraph(
+        "AI Resume Analysis Report",
+        styles["Title"]
+    )
+)
+
+    content.append(Spacer(1, 12))
+
+    content.append(
+    Paragraph(
+        f"ATS Score: {ats_score}/100",
+        styles["Heading2"]
+    )
+)
+
+    content.append(Spacer(1, 12))
+
+    content.append(
+        Paragraph(
+            "Detected Skills",
+            styles["Heading2"]
+        )
+    )
+
+    content.append(
+        Paragraph(
+            ", ".join(detected_skills),
+            styles["BodyText"]
+        )
+    )
+
+    content.append(Spacer(1, 12))
+
+    content.append(
+        Paragraph(
+            "Matched Skills",
+            styles["Heading2"]
+        )
+    )
+
+    content.append(
+        Paragraph(
+            ", ".join(matched_skills),
+            styles["BodyText"]
+        )
+    )
+
+    content.append(Spacer(1, 12))
+
+    content.append(
+        Paragraph(
+            "Missing Skills",
+            styles["Heading2"]
+        )
+    )
+
+    content.append(
+        Paragraph(
+            ", ".join(missing_skills),
+            styles["BodyText"]
+        )
+    )
+
+    content.append(Spacer(1, 12))
+
+    content.append(
+        Paragraph(
+            "AI Resume Feedback",
+            styles["Heading2"]
+        )
+    )
+
+    content.append(
+        Paragraph(str(ai_feedback), styles["BodyText"])
+    )
+
+    content.append(Spacer(1, 12))
+
+    content.append(
+        Paragraph(
+            "AI Job Match Feedback",
+            styles["Heading2"]
+        )
+    )
+
+    content.append(
+        Paragraph(str(job_feedback), styles["BodyText"])
+    )
+
+    doc.build(content)
+
+    buffer.seek(0)
+
+    return buffer
+
+# =========================
 # File Upload
 # =========================
 uploaded_file = st.file_uploader(
@@ -96,6 +224,17 @@ job_description = st.text_area(
     "Paste Job Description",
     height=200
 )
+
+# Store AI Responses
+
+if "ai_feedback" not in st.session_state:
+    st.session_state.ai_feedback = ""
+
+if "job_feedback" not in st.session_state:
+    st.session_state.job_feedback = ""
+
+if "improved_resume" not in st.session_state:
+    st.session_state.improved_resume = ""
 
 # =========================
 # Resume Processing
@@ -385,7 +524,7 @@ if uploaded_file is not None:
         with st.spinner("Analyzing Resume..."):
 
             model = genai.GenerativeModel(
-                "gemini-2.5-flash"
+                "models/gemini-2.5-flash"
             )
 
             prompt = f"""
@@ -403,14 +542,19 @@ if uploaded_file is not None:
 
             {resume_text}
             """
-
             try:
 
                 response = model.generate_content(
-                prompt
-            )
+                    prompt
+                )
 
-                st.write(response.text)
+                st.session_state.ai_feedback = response.text
+
+                if st.session_state.ai_feedback:
+
+                    st.write(
+                        st.session_state.ai_feedback
+                    )
 
             except Exception as e:
 
@@ -423,7 +567,9 @@ if uploaded_file is not None:
     st.subheader("🎯 Job Match Analysis")
 
     if job_description:
-
+        matched_skills = []
+        missing_skills = []
+        match_score = 0
         # Convert Job Description to lowercase
         job_description_lower = job_description.lower()
 
@@ -532,4 +678,85 @@ if uploaded_file is not None:
 
                 response = model.generate_content(prompt)
 
-                st.markdown(response.text)
+                st.session_state.job_feedback = response.text
+
+                if st.session_state.job_feedback:
+
+                    st.write(
+                        st.session_state.job_feedback
+                    )
+    # ==========================
+    # AI RESUME IMPROVEMENT
+    # ==========================
+
+    st.subheader(
+        "✨ AI Resume Improvement Generator"
+    )
+
+    if st.button(
+        "Generate Improved Resume"
+    ):
+
+        with st.spinner(
+            "Generating ATS Optimized Resume..."
+        ):
+
+            model = genai.GenerativeModel(
+                "models/gemini-2.5-flash"
+            )
+
+            prompt = f"""
+            Analyze the following resume.
+
+            Generate:
+
+            1. Improved Professional Summary
+
+            2. Improved Technical Skills Section
+
+            3. Improved Project Descriptions
+
+            4. ATS Keywords To Add
+
+            5. Final Resume Improvement Suggestions
+
+            Resume:
+
+            {resume_text}
+            """
+
+            response = model.generate_content(
+                prompt
+            )
+
+            st.session_state.improved_resume = (
+                response.text
+            )
+
+            if st.session_state.improved_resume:
+                st.write(
+                    st.session_state.improved_resume
+                )
+
+    # ==========================
+    # DOWNLOAD PDF REPORT
+    # ==========================
+
+    if (st.session_state.ai_feedback
+    or st.session_state.job_feedback):
+
+        pdf_file = generate_pdf_report(
+            ats_score,
+            detected_skills,
+            matched_skills,
+            missing_skills,
+            st.session_state.ai_feedback,
+            st.session_state.job_feedback
+        )
+
+        st.download_button(
+            label="📄 Download PDF Report",
+            data=pdf_file,
+            file_name="resume_analysis_report.pdf",
+            mime="application/pdf"
+        )            
