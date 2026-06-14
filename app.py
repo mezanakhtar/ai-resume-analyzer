@@ -1,3 +1,4 @@
+
 import streamlit as st
 import pdfplumber
 import os
@@ -5,6 +6,13 @@ import google.generativeai as genai
 
 from dotenv import load_dotenv
 from io import BytesIO
+
+
+load_dotenv()
+
+api_key = os.getenv("GEMINI_API_KEY")
+
+st.write(api_key[:10] if api_key else "No API Key Found")
 
 from reportlab.platypus import (
     SimpleDocTemplate,
@@ -235,6 +243,9 @@ if "job_feedback" not in st.session_state:
 
 if "improved_resume" not in st.session_state:
     st.session_state.improved_resume = ""
+
+if "ats_optimization" not in st.session_state:
+    st.session_state.ats_optimization = ""
 
 # =========================
 # Resume Processing
@@ -725,18 +736,97 @@ if uploaded_file is not None:
             {resume_text}
             """
 
-            response = model.generate_content(
-                prompt
-            )
+            try:
 
-            st.session_state.improved_resume = (
-                response.text
-            )
+                response = model.generate_content(
+                    prompt
+                )
 
-            if st.session_state.improved_resume:
+                st.session_state.improved_resume = (
+                    response.text
+                )
+
                 st.write(
                     st.session_state.improved_resume
                 )
+
+            except Exception as e:
+
+                st.error(
+                    f"Gemini API Error: {e}"
+                )
+    
+    # ==========================
+    # ATS OPTIMIZATION GENERATOR
+    # ==========================
+
+    st.subheader(
+        "🚀 ATS Optimization Generator"
+    )
+
+    if job_description:
+
+        if st.button(
+            "Generate ATS Optimization"
+        ):
+
+            with st.spinner(
+                "Generating ATS Suggestions..."
+            ):
+
+                model = genai.GenerativeModel(
+                    "models/gemini-2.5-flash"
+                )
+
+                prompt = f"""
+                Compare the Resume and Job Description.
+
+                Generate:
+
+                1. ATS Match Analysis
+
+                2. Missing Keywords
+
+                3. Skills To Add
+
+                4. Resume Keywords To Include
+
+                5. Recommended Projects
+
+                6. Learning Roadmap
+
+                7. ATS Optimization Suggestions
+
+                Resume:
+
+                {resume_text}
+
+                Job Description:
+
+                {job_description}
+                """
+
+                try:
+
+                    response = model.generate_content(prompt)
+
+                    st.session_state.ats_optimization = (response.text)
+
+                except Exception as e:
+
+                    st.error(
+                        f"Gemini API Error: {e}")
+
+                st.write(
+                    st.session_state.ats_optimization)
+
+    # Persist Output
+
+    if st.session_state.ats_optimization:
+
+        st.write(
+            st.session_state.ats_optimization
+        )
 
     # ==========================
     # DOWNLOAD PDF REPORT
