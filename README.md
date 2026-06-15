@@ -128,29 +128,29 @@ AI-Resume-Analyzer/
 
 # 📸 Application Screenshots
 
-### Dashboard
+## Dashboard
 
-![Dashboard](screenshots/dashboard.png)
+![Dashboard](Screenshots/dashboard.png)
 
-### AI Resume Feedback
+## AI Resume Feedback
 
-![AI Resume Feedback](screenshots/ai_feedback.png)
+![AI Resume Feedback](Screenshots/ai_feedback.png)
 
-### Job Match Analysis
+## Job Match Analysis
 
-![Job Match Analysis](screenshots/job_match.png)
+![Job Match Analysis](Screenshots/ats_job_match_analysis.png)
 
-### ATS Optimization
+## ATS Optimization
 
-![ATS Optimization](screenshots/ats_optimization.png)
+![ATS Optimization](Screenshots/ats_optimization.png)
 
-### Keyword Gap Analyzer
+## Keyword Gap Analyzer
 
-![Keyword Gap Analyzer](screenshots/keyword_gap.png)
+![Keyword Gap Analyzer](Screenshots/keyword_gap.png)
 
-### PDF Report
+## Job Match Feedback
 
-![PDF Report](screenshots/pdf_report.png)
+![Job Match Feedback](Screenshots/job_match.png)
 
 ---
 
