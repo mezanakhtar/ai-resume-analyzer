@@ -126,7 +126,7 @@ AI-Resume-Analyzer/
 
 ---
 
-# 📸 Application Screenshots
+# 📸 Application screenshots
 
 ## Dashboard
 
