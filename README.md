@@ -1,62 +1,59 @@
 # 🚀 AI Resume Analyzer
 
-An AI-powered Resume Analysis and ATS Optimization platform built using Streamlit, Python, and Google Gemini.
+An AI-powered Resume Analysis and ATS Optimization platform built using **Python, Streamlit, Google Gemini AI, PDFPlumber, and ReportLab**.
 
-This application helps job seekers analyze their resumes, calculate ATS scores, identify missing skills, compare resumes against job descriptions, generate AI-powered feedback, and download professional analysis reports.
+This application helps job seekers analyze resumes, calculate ATS scores, identify skill gaps, compare resumes against job descriptions, generate AI-powered career insights, and export detailed PDF reports.
 
 ---
 
-## 📌 Features
+# 📌 Features
 
-### 📄 Resume Upload
+## 📄 Resume Upload & Parsing
 
-* Upload resume in PDF format
-* Extract resume text automatically
-* Display uploaded file information
+* Upload resumes in PDF format
+* Automatic text extraction
+* Resume content preview
 
-### 🎯 ATS Score Analysis
+## 🎯 ATS Score Analysis
 
-* Calculate ATS compatibility score
-* Evaluate resume quality
-* Provide ATS readiness insights
+* ATS compatibility scoring
+* Resume quality evaluation
+* ATS readiness assessment
 
-### 🛠 Skills Detection
+## 🛠 Skill Detection
 
-* Detect technical skills from resume
-* Compare skills with job descriptions
-* Identify matched and missing skills
+* Automatic skill extraction
+* AI/ML skill recognition
+* Technical skill analysis
 
-### 🤖 AI Resume Feedback
+## 📊 Job Match Analysis
 
-Generate AI-powered resume analysis including:
+* Compare resume with job descriptions
+* Match percentage calculation
+* Matched skills identification
+* Missing skills detection
 
-* Professional Summary
-* Key Strengths
-* Weaknesses
-* ATS Improvement Suggestions
-* Recommended Skills
+## 🤖 AI Resume Feedback
 
-### 🎯 AI Job Match Feedback
+Powered by Google Gemini AI:
 
-Compare resume against a job description and generate:
+* Professional resume review
+* Strength analysis
+* Weakness analysis
+* ATS improvement suggestions
+* Recommended skills
 
-* Match Percentage
-* Strength Analysis
-* Missing Skills
-* Interview Readiness
-* Learning Roadmap
-
-### ✨ AI Resume Improvement Generator
+## ✨ AI Resume Improvement Generator
 
 Generate:
 
 * Improved Professional Summary
 * Enhanced Technical Skills Section
-* Better Project Descriptions
+* Improved Project Descriptions
 * ATS Keywords
-* Resume Improvement Suggestions
+* Resume Enhancement Suggestions
 
-### 🚀 ATS Optimization Generator
+## 🚀 ATS Optimization Generator
 
 Generate:
 
@@ -67,18 +64,30 @@ Generate:
 * Learning Roadmap
 * ATS Optimization Suggestions
 
-### 📥 PDF Report Download
+## 🎯 Resume Keyword Gap Analyzer
 
-Download a complete resume analysis report containing:
+Analyze:
+
+* ATS Match Percentage
+* Missing Keywords
+* Recommended Keywords
+* Priority Skills
+* Suggested Certifications
+* Improvement Plan
+
+## 📄 PDF Report Export
+
+Generate professional reports including:
 
 * ATS Score
-* Skills Analysis
-* AI Resume Feedback
-* AI Job Match Feedback
+* Skill Analysis
+* Resume Feedback
+* Job Match Feedback
+* Resume Optimization Insights
 
 ---
 
-## 🛠 Tech Stack
+# 🛠 Technology Stack
 
 ### Frontend
 
@@ -102,32 +111,61 @@ Download a complete resume analysis report containing:
 
 ---
 
-## 📂 Project Structure
+# 📂 Project Structure
 
+```text
 AI-Resume-Analyzer/
 
+├── screenshots/
 ├── app.py
-
-├── resumes/
-
-├── .env
-
 ├── requirements.txt
-
 ├── README.md
-
-└── .gitignore
+├── .gitignore
+└── resumes/
+```
 
 ---
 
-## ⚙️ Installation
+# 📸 Application Screenshots
+
+### Dashboard
+
+![Dashboard](screenshots/dashboard.png)
+
+### AI Resume Feedback
+
+![AI Resume Feedback](screenshots/ai_feedback.png)
+
+### Job Match Analysis
+
+![Job Match Analysis](screenshots/job_match.png)
+
+### ATS Optimization
+
+![ATS Optimization](screenshots/ats_optimization.png)
+
+### Keyword Gap Analyzer
+
+![Keyword Gap Analyzer](screenshots/keyword_gap.png)
+
+### PDF Report
+
+![PDF Report](screenshots/pdf_report.png)
+
+---
+
+# ⚙️ Installation
 
 ### Clone Repository
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/ai-resume-analyzer.git
+git clone https://github.com/YOUR_USERNAME/AI-Resume-Analyzer.git
+```
 
-cd ai-resume-analyzer
+### Navigate to Project
+
+```bash
+cd AI-Resume-Analyzer
 ```
 
 ### Create Virtual Environment
@@ -138,21 +176,17 @@ python -m venv venv
 
 ### Activate Environment
 
-Windows:
-
 ```bash
 venv\Scripts\activate
 ```
 
-### Install Dependencies
+### Install Requirements
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### Configure Environment Variables
-
-Create a `.env` file:
+### Create .env File
 
 ```env
 GEMINI_API_KEY=YOUR_API_KEY
@@ -166,45 +200,44 @@ streamlit run app.py
 
 ---
 
-## 🎯 Use Cases
+# 🎯 Use Cases
 
 * Students
 * Fresh Graduates
+* AI/ML Aspirants
+* Data Science Candidates
 * Job Seekers
-* Software Engineers
-* AI/ML Engineers
-* Data Science Aspirants
+* Career Transition Professionals
 
 ---
 
-## 🔮 Future Improvements
+# 🔮 Future Enhancements
 
-* Professional PDF Formatting
-* Resume Version Generator
 * Cover Letter Generator
+* Resume Version Management
 * Multi-Resume Comparison
-* Resume Ranking System
 * Recruiter Dashboard
-* Resume Recommendation Engine
+* Cloud Deployment
+* Advanced PDF Styling
 
 ---
 
-## 👨‍💻 Author
+# 👨‍💻 Author
 
 **Mezan Akhtar**
 
 Aspiring AI & Generative AI Engineer
 
-Focused on:
+Skills:
 
 * Artificial Intelligence
 * Machine Learning
 * Generative AI
 * Agentic AI
-* Automation Systems
+* Workflow Automation
 
 ---
 
-## ⭐ Support
+# ⭐ Support
 
-If you found this project useful, consider giving it a star on GitHub.
+If you found this project useful, consider giving it a ⭐ on GitHub.
