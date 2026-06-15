@@ -6,29 +6,21 @@ import google.generativeai as genai
 
 from dotenv import load_dotenv
 from io import BytesIO
-
-
-load_dotenv()
-
-api_key = os.getenv("GEMINI_API_KEY")
-
-st.write(api_key[:10] if api_key else "No API Key Found")
-
+from datetime import datetime
 from reportlab.platypus import (
     SimpleDocTemplate,
     Paragraph,
-    Spacer
-)
+    Spacer,
+    PageBreak,
+    Table,
+    TableStyle)
 
-from reportlab.lib.styles import (
-    getSampleStyleSheet
-)
+from reportlab.lib.styles import (getSampleStyleSheet)
+from reportlab.lib import colors
 
 load_dotenv()
 
-genai.configure(
-    api_key=os.getenv("GEMINI_API_KEY")
-)
+genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 
 # =========================
 # Page Configuration
@@ -36,8 +28,7 @@ genai.configure(
 st.set_page_config(
     page_title="AI Resume Analyzer",
     page_icon="📄",
-    layout="wide"
-)
+    layout="wide")
 
 # =========================
 # Title
@@ -124,94 +115,250 @@ def generate_pdf_report(
 
     content = []
 
-    content.append(
-    Paragraph(
-        "AI Resume Analysis Report",
-        styles["Title"]
-    )
-)
-
-    content.append(Spacer(1, 12))
+    # =========================
+    # PDF Branding
+    # =========================
 
     content.append(
-    Paragraph(
-        f"ATS Score: {ats_score}/100",
-        styles["Heading2"]
+        Paragraph(
+            "AI Resume Analyzer",
+            styles["Title"]
+        )
     )
-)
 
-    content.append(Spacer(1, 12))
+    content.append(
+        Paragraph(
+            "Powered by Gemini AI",
+            styles["Heading2"]
+        )
+    )
+
+    content.append(
+        Paragraph(
+            "Created by Mezan Akhtar",
+            styles["BodyText"]
+        )
+    )
+
+    content.append(Spacer(1, 20))    
+
+    # =========================
+    # TITLE
+    # =========================
+
+    content.append(
+        Paragraph(
+            "AI Resume Analysis Report",
+            styles["Title"]
+        )
+    )
+
+    content.append(
+        Paragraph(
+            f"Generated On: {datetime.now().strftime('%d-%m-%Y %H:%M')}",
+            styles["BodyText"]
+        )
+    )
+
+    content.append(Spacer(1, 20))
+
+    # =========================
+    # ATS SCORE
+    # =========================
+
+    content.append(
+        Paragraph(
+            "ATS SCORE",
+            styles["Heading1"]
+        )
+    )
+
+    ats_table = Table(
+        [
+            ["ATS Score"],
+            [f"{ats_score}/100"]
+        ],
+        colWidths=[200]
+    )
+
+    ats_table.setStyle(
+        TableStyle([
+            ("BACKGROUND", (0,0), (-1,0), colors.lightgrey),
+            ("GRID", (0,0), (-1,-1), 1, colors.black),
+            ("ALIGN", (0,0), (-1,-1), "CENTER"),
+            ("FONTSIZE", (0,1), (-1,1), 20),
+            ("BOTTOMPADDING", (0,0), (-1,-1), 12),
+        ])
+    )
+
+    content.append(ats_table)
+
+    content.append(Spacer(1, 20))
+
+    # =========================
+    # SUMMARY TABLE
+    # =========================
+    summary_table = Table(
+        [
+            ["Metric", "Count"],
+            ["Detected Skills", len(detected_skills)],
+            ["Matched Skills", len(matched_skills)],
+            ["Missing Skills", len(missing_skills)]
+        ],
+        colWidths=[200, 100]
+    )
+
+    summary_table.setStyle(
+        TableStyle([
+            ("BACKGROUND", (0,0), (-1,0), colors.lightgrey),
+            ("GRID", (0,0), (-1,-1), 1, colors.black),
+            ("ALIGN", (0,0), (-1,-1), "CENTER")
+        ])
+    )
+
+    content.append(
+        Paragraph(
+            "Resume Summary",
+            styles["Heading1"]
+        )
+    )
+
+    content.append(summary_table)
+
+    content.append(Spacer(1, 20))
+
+    # =========================
+    # DETECTED SKILLS
+    # =========================
 
     content.append(
         Paragraph(
             "Detected Skills",
-            styles["Heading2"]
+            styles["Heading1"]
+            )
         )
+
+    skills_data = [["Detected Skills"]]
+
+    for skill in detected_skills:
+        skills_data.append([skill])
+
+    skills_table = Table(
+        skills_data,
+        colWidths=[250]
     )
 
-    content.append(
-        Paragraph(
-            ", ".join(detected_skills),
-            styles["BodyText"]
-        )
+    skills_table.setStyle(
+        TableStyle([
+            ("BACKGROUND", (0,0), (-1,0), colors.lightgrey),
+            ("GRID", (0,0), (-1,-1), 1, colors.black)
+        ])
     )
 
-    content.append(Spacer(1, 12))
+    content.append(skills_table)
+
+    content.append(Spacer(1, 15))
+
+    # =========================
+    # MATCHED SKILLS
+    # =========================
 
     content.append(
         Paragraph(
             "Matched Skills",
-            styles["Heading2"]
+            styles["Heading1"]
         )
     )
 
-    content.append(
-        Paragraph(
-            ", ".join(matched_skills),
-            styles["BodyText"]
-        )
+    matched_data = [["Matched Skills"]]
+
+    for skill in matched_skills:
+        matched_data.append([skill])
+
+    matched_table = Table(
+        matched_data,
+        colWidths=[250]
     )
 
-    content.append(Spacer(1, 12))
+    matched_table.setStyle(
+        TableStyle([
+            ("BACKGROUND", (0,0), (-1,0), colors.lightgrey),
+            ("GRID", (0,0), (-1,-1), 1, colors.black)
+        ])
+    )
+
+    content.append(matched_table)
+
+    content.append(Spacer(1, 15))
+
+    # =========================
+    # MISSING SKILLS
+    # =========================
 
     content.append(
         Paragraph(
             "Missing Skills",
-            styles["Heading2"]
+            styles["Heading1"]
         )
     )
 
-    content.append(
-        Paragraph(
-            ", ".join(missing_skills),
-            styles["BodyText"]
-        )
+    missing_data = [["Missing Skills"]]
+
+    for skill in missing_skills:
+        missing_data.append([skill])
+
+    missing_table = Table(
+        missing_data,
+        colWidths=[250]
     )
 
-    content.append(Spacer(1, 12))
+    missing_table.setStyle(
+        TableStyle([
+            ("BACKGROUND", (0,0), (-1,0), colors.lightgrey),
+            ("GRID", (0,0), (-1,-1), 1, colors.black)
+        ])
+    )
+
+    content.append(missing_table)
+
+    content.append(PageBreak())
+
+    # =========================
+    # AI FEEDBACK
+    # =========================
 
     content.append(
         Paragraph(
             "AI Resume Feedback",
-            styles["Heading2"]
+            styles["Heading1"]
         )
     )
 
     content.append(
-        Paragraph(str(ai_feedback), styles["BodyText"])
+        Paragraph(
+            str(ai_feedback),
+            styles["BodyText"]
+        )
     )
 
-    content.append(Spacer(1, 12))
+    content.append(Spacer(1, 20))
+
+    # =========================
+    # JOB MATCH FEEDBACK
+    # =========================
 
     content.append(
         Paragraph(
             "AI Job Match Feedback",
-            styles["Heading2"]
+            styles["Heading1"]
         )
     )
 
     content.append(
-        Paragraph(str(job_feedback), styles["BodyText"])
+        Paragraph(
+            str(job_feedback),
+            styles["BodyText"]
+        )
     )
 
     doc.build(content)
@@ -225,13 +372,11 @@ def generate_pdf_report(
 # =========================
 uploaded_file = st.file_uploader(
     "Choose a Resume PDF",
-    type=["pdf"]
-)
+    type=["pdf"])
 
 job_description = st.text_area(
     "Paste Job Description",
-    height=200
-)
+    height=200)
 
 # Store AI Responses
 
@@ -246,6 +391,9 @@ if "improved_resume" not in st.session_state:
 
 if "ats_optimization" not in st.session_state:
     st.session_state.ats_optimization = ""
+
+if "keyword_gap" not in st.session_state:
+    st.session_state.keyword_gap = ""
 
 # =========================
 # Resume Processing
@@ -278,8 +426,7 @@ if uploaded_file is not None:
     st.text_area(
         "Resume Content",
         resume_text,
-        height=250
-    )
+        height=250)
 
     # =========================
     # 2. Detect Skills
@@ -294,13 +441,9 @@ if uploaded_file is not None:
         if skill in resume_text_lower:
 
             if skill in skill_display_names:
-                detected_skills.append(
-                    skill_display_names[skill]
-                )
+                detected_skills.append(skill_display_names[skill])
             else:
-                detected_skills.append(
-                    skill.title()
-                )
+                detected_skills.append(skill.title())
 
     # =========================
     # 3. Remove Duplicates
@@ -334,11 +477,7 @@ if uploaded_file is not None:
 
     ats_score = 0
 
-    contact_keywords = [
-        "@",
-        "phone",
-        "+91"
-    ]
+    contact_keywords = ["@", "phone", "+91"]
 
     education_keywords = [
         "education",
@@ -826,6 +965,76 @@ if uploaded_file is not None:
 
         st.write(
             st.session_state.ats_optimization
+        )
+
+    # ==========================
+    # KEYWORD GAP ANALYZER
+    # ==========================
+
+    st.subheader(
+        "🎯 Resume Keyword Gap Analyzer"
+    )
+
+    if job_description:
+
+        if st.button(
+            "Analyze Keyword Gap"
+        ):
+
+            with st.spinner(
+                "Analyzing Keyword Gaps..."
+            ):
+
+                model = genai.GenerativeModel(
+                    "models/gemini-2.5-flash"
+                )
+
+                prompt = f"""
+                Compare the Resume and Job Description.
+
+                Generate:
+
+                1. ATS Match Percentage
+
+                2. Missing Keywords
+
+                3. Recommended Keywords
+
+                4. Priority Skills To Learn
+
+                5. Suggested Certifications
+
+                6. Final Improvement Plan
+
+                Resume:
+
+                {resume_text}
+
+                Job Description:
+
+                {job_description}
+                """
+
+                try:
+
+                    response = model.generate_content(
+                        prompt
+                    )
+
+                    st.session_state.keyword_gap = (
+                        response.text
+                    )
+
+                except Exception as e:
+
+                    st.error(
+                        f"Gemini API Error: {e}"
+                    )
+
+    if st.session_state.keyword_gap:
+
+        st.write(
+            st.session_state.keyword_gap
         )
 
     # ==========================
