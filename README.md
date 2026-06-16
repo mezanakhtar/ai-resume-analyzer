@@ -122,36 +122,8 @@ AI-Resume-Analyzer/
 ├── README.md
 ├── .gitignore
 └── resumes/
-```
 
----
 
-# 📸 Application screenshots
-
-## Dashboard
-
-![Dashboard](screenshots/dashboard.png)
-
-## AI Resume Feedback
-
-![AI Resume Feedback](screenshots/ai_feedback.png)
-
-## Job Match Analysis
-
-![Job Match Analysis](screenshots/ats_job_match_analysis.png)
-
-## ATS Optimization
-
-![ATS Optimization](screenshots/ats_optimization.png)
-
-## Keyword Gap Analyzer
-
-![Keyword Gap Analyzer](screenshots/keyword_gap.png)
-
-## Job Match Feedback
-
-![Job Match Feedback](screenshots/job_match.png)
----
 
 # ⚙️ Installation
 
