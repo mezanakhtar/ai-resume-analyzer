@@ -1,9 +1,13 @@
-
 import streamlit as st
 import pdfplumber
 import os
 import google.generativeai as genai
 
+st.set_page_config(
+    page_title="AI Resume Analyzer",
+    page_icon="📄",
+    layout="wide"
+)
 
 from io import BytesIO
 from datetime import datetime
@@ -18,8 +22,12 @@ from reportlab.platypus import (
 from reportlab.lib.styles import (getSampleStyleSheet)
 from reportlab.lib import colors
 
+from dotenv import load_dotenv
+
+load_dotenv()
+
 genai.configure(
-    api_key=st.secrets["GEMINI_API_KEY"]
+    api_key=os.getenv("GEMINI_API_KEY")
 )
 
 # =========================
@@ -421,12 +429,12 @@ if uploaded_file is not None:
     # Display Extracted Text
     # =========================
 
-    st.subheader("📄 Extracted Resume Text")
-
-    st.text_area(
-        "Resume Content",
-        resume_text,
-        height=250)
+    with st.expander("📄 View Extracted Resume Text"):
+        st.text_area(
+            "Resume Content",
+            resume_text,
+            height=300
+        )
 
     # =========================
     # 2. Detect Skills
@@ -1082,4 +1090,8 @@ if uploaded_file is not None:
             data=pdf_file,
             file_name="resume_analysis_report.pdf",
             mime="application/pdf"
-        )            
+        )
+
+
+st.markdown("---")
+st.caption("Built with Streamlit + Gemini AI by Mezan Akhtar")            
