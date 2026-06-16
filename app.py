@@ -1091,7 +1091,6 @@ if uploaded_file is not None:
             file_name="resume_analysis_report.pdf",
             mime="application/pdf"
         )
-
-
+        
 st.markdown("---")
 st.caption("Built with Streamlit + Gemini AI by Mezan Akhtar")            
