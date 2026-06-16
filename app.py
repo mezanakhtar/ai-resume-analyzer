@@ -664,12 +664,43 @@ if uploaded_file is not None:
     )
 
     # =========================
+    # AI ACTION PANEL
+    # =========================
+
+    col1, col2, col3, col4, col5 = st.columns(5)
+
+    with col1:
+        ai_feedback_btn = st.button(
+            "🤖 AI Feedback"
+        )
+
+    with col2:
+        job_match_btn = st.button(
+            "🎯 Job Match"
+        )
+
+    with col3:
+        improve_btn = st.button(
+            "✨ Improve Resume"
+        )
+
+    with col4:
+        ats_btn = st.button(
+            "🚀 ATS Optimize"
+        )
+
+    with col5:
+        keyword_btn = st.button(
+            "📊 Keyword Gap"
+        )
+
+    # =========================
     # AI Resume Feedback
     # =========================
 
-    st.subheader("🤖 AI Resume Feedback")
+    # st.subheader("🤖 AI Resume Feedback")
 
-    if st.button("Generate AI Feedback"):
+    if ai_feedback_btn:
 
         with st.spinner("Analyzing Resume..."):
 
@@ -714,7 +745,7 @@ if uploaded_file is not None:
     # JOB MATCH ANALYSIS
     # ==========================
 
-    st.subheader("🎯 Job Match Analysis")
+    # st.subheader("🎯 Job Match Analysis")
 
     if job_description:
         matched_skills = []
@@ -795,11 +826,11 @@ if uploaded_file is not None:
     # AI JOB MATCH FEEDBACK
     # ==========================
 
-    st.subheader("🤖 AI Job Match Feedback")
+    # st.subheader("🤖 AI Job Match Feedback")
 
     if job_description:
 
-        if st.button("Generate Job Match Feedback"):
+        if job_match_btn:
 
             with st.spinner("Analyzing Resume Against Job Description..."):
 
@@ -839,13 +870,11 @@ if uploaded_file is not None:
     # AI RESUME IMPROVEMENT
     # ==========================
 
-    st.subheader(
-        "✨ AI Resume Improvement Generator"
-    )
+    # st.subheader(
+    #     "✨ AI Resume Improvement Generator"
+    # )
 
-    if st.button(
-        "Generate Improved Resume"
-    ):
+    if improve_btn:
 
         with st.spinner(
             "Generating ATS Optimized Resume..."
@@ -899,15 +928,13 @@ if uploaded_file is not None:
     # ATS OPTIMIZATION GENERATOR
     # ==========================
 
-    st.subheader(
-        "🚀 ATS Optimization Generator"
-    )
+    # st.subheader(
+    #     "🚀 ATS Optimization Generator"
+    # )
 
     if job_description:
 
-        if st.button(
-            "Generate ATS Optimization"
-        ):
+        if ats_btn:
 
             with st.spinner(
                 "Generating ATS Suggestions..."
@@ -971,16 +998,13 @@ if uploaded_file is not None:
     # KEYWORD GAP ANALYZER
     # ==========================
 
-    st.subheader(
-        "🎯 Resume Keyword Gap Analyzer"
-    )
+    # st.subheader(
+    #     "🎯 Resume Keyword Gap Analyzer"
+    # )
 
     if job_description:
 
-        if st.button(
-            "Analyze Keyword Gap"
-        ):
-
+        if keyword_btn:
             with st.spinner(
                 "Analyzing Keyword Gaps..."
             ):
