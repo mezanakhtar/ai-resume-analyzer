@@ -2,6 +2,12 @@
 
 # 🚀 AI Resume Analyzer
 
+# AI Resume Analyzer
+
+🚀 Live Demo: https://ai-resume-analyzer-by-mezan.streamlit.app/
+
+AI-powered Resume Analyzer built with Streamlit and Gemini AI.
+
 An AI-powered Resume Analysis and ATS Optimization platform built using **Python, Streamlit, Google Gemini AI, PDFPlumber, and ReportLab**.
 
 This application helps job seekers analyze resumes, calculate ATS scores, identify skill gaps, compare resumes against job descriptions, generate AI-powered career insights, and export detailed PDF reports.
