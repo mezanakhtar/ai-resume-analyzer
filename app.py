@@ -4,7 +4,7 @@ import pdfplumber
 import os
 import google.generativeai as genai
 
-from dotenv import load_dotenv
+
 from io import BytesIO
 from datetime import datetime
 from reportlab.platypus import (
@@ -18,9 +18,9 @@ from reportlab.platypus import (
 from reportlab.lib.styles import (getSampleStyleSheet)
 from reportlab.lib import colors
 
-load_dotenv()
-
-genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
+genai.configure(
+    api_key=st.secrets["GEMINI_API_KEY"]
+)
 
 # =========================
 # Page Configuration
