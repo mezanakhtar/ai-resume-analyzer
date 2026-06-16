@@ -2,8 +2,6 @@
 
 # 🚀 AI Resume Analyzer
 
-# AI Resume Analyzer
-
 🚀 Live Demo: https://ai-resume-analyzer-by-mezan.streamlit.app/
 
 AI-powered Resume Analyzer built with Streamlit and Gemini AI.
