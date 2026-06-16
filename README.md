@@ -1,3 +1,5 @@
+[![Live Demo](https://img.shields.io/badge/Live-Demo-brightgreen)](https://ai-resume-analyzer-by-mezan.streamlit.app/)
+
 # 🚀 AI Resume Analyzer
 
 An AI-powered Resume Analysis and ATS Optimization platform built using **Python, Streamlit, Google Gemini AI, PDFPlumber, and ReportLab**.
